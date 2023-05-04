@@ -35,6 +35,12 @@ module.exports = appInfo => {
     // myAppName: 'egg',
   };
 
+  config.multipart = {
+    mode: 'file',
+    fileSize: 1048576000,
+    whitelist: ['.txt']
+  };
+
   return {
     ...config,
     ...userConfig,
