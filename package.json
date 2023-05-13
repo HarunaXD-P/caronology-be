@@ -9,7 +9,10 @@
   "dependencies": {
     "egg": "^3",
     "egg-cors": "^2.2.3",
+    "egg-mongoose": "^3.3.1",
     "egg-scripts": "^2",
+    "md5": "^2.3.0",
+    "mongodb": "^5.4.0",
     "mz": "^2.7.0",
     "mz-modules": "^2.1.0"
   },

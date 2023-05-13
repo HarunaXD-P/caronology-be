@@ -5,8 +5,8 @@ const pump = require('mz-modules/pump');
 var md5 =require("md5");
 const { Controller } = require('egg');
 
-class UploadController extends Controller {
-  async index() {
+class ManualIputController extends Controller {
+  async upload_file() {
     const { ctx } = this;
     const file =  ctx.request.files[0];
     // 获取文件名称
@@ -32,6 +32,43 @@ class UploadController extends Controller {
       data: res
     }
   }
+  async get_file_list() {
+    const { ctx } = this;
+    ctx.body = {
+      status: 'ok',
+      data: res
+    }
+  }
+  async get_year_list() {
+
+  }
+  async get_event_list() {
+  }
+  async get_proof_list() {
+
+  }
+  async get_relation_list() {
+
+  }
+  //创建新条目和修改旧条目都用这个
+  async save_year() {
+
+  }
+  async save_event() {
+
+  }
+  //需要区分proof的父级是event还是relation
+  async save_proof() {
+
+  }
+  async save_realtion() {
+
+  }
+  //区分type
+  async delete_line() {
+
+  }
+
 }
 
-module.exports = UploadController;
+module.exports = ManualInputController;
