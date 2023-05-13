@@ -6,8 +6,6 @@ module.exports = app => {
     fileName: {type: String },
     fileLocation: { type: String },
     fileProtagonist: {type: String },
-    fileStatus: { type: Number }
-
   });
   return mongoose.model("fileTableModel", fileTable, "fileTable")
 }

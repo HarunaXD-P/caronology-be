@@ -8,7 +8,6 @@ class fileService extends Service {
       fileName: obj.fileName,
       fileLocation: obj.fileLocation,
       fileProtagonist: obj.fileProtagonist,
-      fileStatus: 0
     });
     // 数据保存到数据库
     fileList.save();
