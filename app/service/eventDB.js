@@ -1,6 +1,6 @@
 const Service = require("egg").Service;
 class eventService extends Service {
-  async AddFileRecord(obj) {
+  async AddEventRecord(obj) {
     const { ctx } = this;
     const eventList = new ctx.model.EventTable({
       eventId: obj.eventId,

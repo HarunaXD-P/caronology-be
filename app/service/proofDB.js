@@ -1,9 +1,10 @@
 const Service = require("egg").Service;
+var md5 = require("md5");
 class proofService extends Service {
   async AddProofRecord(obj) {
     const { ctx } = this;
     const proofList = new ctx.model.ProofTable({
-      proofId: obj.proofId,
+      proofId: md5(obj.proofText + toString(Date.now())),
       proofInfo: obj.proofInfo,
       proofText: obj.proofText,
       proofType: obj.proofType,

@@ -1,3 +1,4 @@
+
 module.exports = app => {
   const { mongoose } = app;
   const { Schema } = mongoose;

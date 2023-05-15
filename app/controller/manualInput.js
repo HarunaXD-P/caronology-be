@@ -35,7 +35,7 @@ class ManualInputController extends Controller {
   }
   async get_file_list() {
     const { ctx } = this;
-    const req = ctx.request.body
+    const req = ctx.query
     try {
       let response = await ctx.service.fileDB.FindFileRecord(req)
       ctx.body = {
@@ -52,7 +52,7 @@ class ManualInputController extends Controller {
   }
   async get_year_list() {
     const { ctx } = this;
-    const req = ctx.request.body
+    const req = ctx.query
     try {
       let response = await ctx.service.yearDB.FindYearRecord(req)
       ctx.body = {
@@ -69,7 +69,7 @@ class ManualInputController extends Controller {
   }
   async get_event_list() {
     const { ctx } = this;
-    const req = ctx.request.body
+    const req = ctx.query
     try {
       let response = await ctx.service.eventDB.FindEventRecord(req)
       ctx.body = {
@@ -85,7 +85,7 @@ class ManualInputController extends Controller {
   }
   async get_proof_list() {
     const { ctx } = this;
-    const req = ctx.request.body
+    const req = ctx.query
     try {
       let response = await ctx.service.proofDB.FindProofRecord(req)
       ctx.body = {
@@ -102,7 +102,7 @@ class ManualInputController extends Controller {
   }
   async get_relation_list() {
     const { ctx } = this;
-    const req = ctx.request.body
+    const req = ctx.query
     try {
       let response = await ctx.service.relationDB.FindRelationRecord(req)
       ctx.body = {
@@ -161,6 +161,7 @@ class ManualInputController extends Controller {
         data: response
       }
     } catch (e) {
+      console.log(e)
       ctx.body = {
         status: 'failed',
         data: {}
@@ -218,26 +219,31 @@ class ManualInputController extends Controller {
   async delete_line() {
     const { ctx } = this
     const req = ctx.request.body
+    console.log(req)
     try {
       let response
       switch (req.type) {
-        case 0:
+        case '0':
           response = await ctx.service.fileDB.DeleteFileRecord({ fileId: req.target_id })
           break;
-        case 1:
+        case '1':
           response = await ctx.service.yearDB.DeleteYearRecord({ yearId: req.target_id })
           break;
-        case 2:
+        case '2':
           response = await ctx.service.eventDB.DeleteEventRecord({ eventId: req.target_id })
           break;
-        case 3:
+        case '3':
           response = await ctx.service.proofDB.DeleteProofRecord({ proofId: req.target_id })
           break;
-        case 4:
+        case '4':
           response = await ctx.service.relationDB.DeleteRelationRecord({ realtionId: req.target_id })
           break;
         default:
           throw new error('错误类型')
+      }
+      ctx.body = {
+        status: 'ok',
+        data: response
       }
     } catch (error) {
       ctx.body = {
@@ -245,6 +251,89 @@ class ManualInputController extends Controller {
         data: {}
       }
     }
+  }
+
+  //req中必须包含一个fileId
+  async get_year_event() {
+    const { ctx } = this
+    const req = ctx.query
+    console.log(req)
+    try {
+      let year_list = await ctx.model.YearTable.find({ fileId: req.fileId }, { _id: 0 })
+      year_list = JSON.parse(JSON.stringify(year_list))
+      for (let i = 0; i < year_list.length; i++) {
+        let event_list = await ctx.model.EventTable.find({ yearId: year_list[i].yearId }, { _id: 0 })
+        year_list[i].event_list = event_list
+      }
+      ctx.body = {
+        status: 'ok',
+        data: year_list
+      }
+    } catch (e) {
+      ctx.body = {
+        status: 'failed',
+        data: e
+      }
+    }
+  }
+  async get_event_proof() {
+    const { ctx } = this
+    const req = ctx.query
+    try {
+      let event = await ctx.service.eventDB.FindEventRecord({ eventId: req.eventId })
+      event = JSON.parse(JSON.stringify(event[0]))
+      console.log(event)
+      let proofs = await ctx.service.proofDB.FindProofRecord({ eventId: req.eventId })
+
+      event.proof_list = proofs
+      console.log(event)
+      ctx.body = {
+        status: 'ok',
+        data: event
+      }
+    } catch (e) {
+      ctx.body = {
+        status: 'failed',
+        data: e
+      }
+    }
+  }
+  //输入query为Eventid，update即可
+  async edit_proof() {
+    const { ctx } = this
+    const query = ctx.query
+    const req = ctx.request.body
+    try {
+      let response = await ctx.service.proofDB.ModifyProofRecord({ proofId: query.proofId }, req)
+      ctx.body = {
+        status: 'ok',
+        data: response
+      }
+    } catch (e) {
+      ctx.body = {
+        status: 'failed',
+        data: e
+      }
+    }
+
+  }
+
+  async delete_proof() {
+    const { ctx } = this
+    const query = ctx.query
+    try {
+      let response = ctx.service.proofDB.DeleteProofRecord({ proofId: query.proofId })
+      ctx.body = {
+        status: 'ok',
+        data: response
+      }
+    } catch (e) {
+      ctx.body = {
+        status: 'failed',
+        data: e
+      }
+    }
+
   }
 }
 
