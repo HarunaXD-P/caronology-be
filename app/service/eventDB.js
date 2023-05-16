@@ -1,16 +1,18 @@
 const Service = require("egg").Service;
+var md5 = require("md5");
 class eventService extends Service {
   async AddEventRecord(obj) {
     const { ctx } = this;
+    let eventId = md5(obj.eventText.slice(0, 128) + toString(Date.now()))
     const eventList = new ctx.model.EventTable({
-      eventId: obj.eventId,
+      eventId,
       eventInfo: obj.eventInfo,
       eventText: obj.eventText,
       eventType: obj.eventType,
       yearId: obj.yearId,
     });
     eventList.save();
-    return "添加成功"
+    return { eventId }
   }
   async FindEventRecord(obj) {
     const { ctx } = this;
