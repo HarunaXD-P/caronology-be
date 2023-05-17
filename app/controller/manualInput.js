@@ -35,7 +35,7 @@ class ManualInputController extends Controller {
   }
   async get_file_list() {
     const { ctx } = this;
-    const req = ctx.query
+    const req = ctx.query || {}
     try {
       let response = await ctx.service.fileDB.FindFileRecord(req)
       ctx.body = {
@@ -334,6 +334,17 @@ class ManualInputController extends Controller {
       }
     }
 
+  }
+  async gis_test() {
+    const {ctx} = this
+    const query = ctx.query
+    let response = await this.ctx.curl('https://maps.cga.harvard.edu/tgaz/placename?fmt=json&n=%E8%8C%B9&p=%E4%B8%8A%E8%B0%B7%E9%83%A1')
+    let res_json = JSON.parse(response.data.toString('utf8'))
+    console.log(response.data.toString('utf8'))
+    ctx.body = {
+      status: 'ok',
+      data: res_json
+    }
   }
 }
 

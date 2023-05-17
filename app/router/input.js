@@ -25,4 +25,5 @@ module.exports = app => {
   router.get('/input/get_event_proof', controller.manualInput.get_event_proof)
   router.post('/input/edit_proof', controller.manualInput.edit_proof)
   router.get('/input/delete_proof', controller.manualInput.delete_proof)
+  router.get('/input/test_input', controller.manualInput.gis_test)
 };
