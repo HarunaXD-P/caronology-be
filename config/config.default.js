@@ -22,7 +22,7 @@ module.exports = appInfo => {
     csrf: {
       enable: false,
     },
-    domainWhiteList: [ '*' ],//允许访问接口的白名单，例如：http://localhost:8080 *表示均可访问
+    domainWhiteList: ['*'],//允许访问接口的白名单，例如：http://localhost:8080 *表示均可访问
   };
 
   config.cors = {
@@ -40,6 +40,10 @@ module.exports = appInfo => {
     fileSize: 1048576000,
     whitelist: ['.txt']
   };
+  config.mongoose = {
+    url: 'mongodb://127.0.0.1:27017/Nianpu',//端口号27017数据库名RUNNOOB
+    options: { useNewUrlParser: true, useUnifiedTopology: true },//其他配置警告解除方法
+  }
 
   return {
     ...config,

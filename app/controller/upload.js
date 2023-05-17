@@ -2,6 +2,7 @@
 const path = require('path');
 const fs = require('mz/fs');
 const pump = require('mz-modules/pump');
+var md5 =require("md5");
 const { Controller } = require('egg');
 
 class UploadController extends Controller {
@@ -20,9 +21,15 @@ class UploadController extends Controller {
     } finally {
       await ctx.cleanupRequestFiles();
     }
+    let res = await ctx.service.fileDB.AddFileRecord({
+      fileId: md5(filename + toString(Date.now())),
+      fileName: filename,
+      fileLocation: targetPath,
+      fileProtagonist: 'Songlian'
+    })
     ctx.body = {
       status: 'ok',
-      data:{}
+      data: res
     }
   }
 }
